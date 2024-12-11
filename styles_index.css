@@ -280,3 +280,19 @@ header h1 {
     0% { opacity: 0; transform: translateY(-20px); }
     100% { opacity: 1; transform: translateY(0); }
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card-item {
+        max-width: 150px;
+        height: 250px;
+    }
+
+    .call-to-action {
+        padding: 20px;
+    }
+
+    .intro {
+        height: 600px;
+    }
+}

@@ -41,7 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_id'])) {
     // Vérification de l'existence de la carte
     $priceQuery = $conn->prepare("SELECT id, price FROM cards WHERE id = :id");
     $priceQuery->execute(['id' => $cardId]);
-    $card = $priceQuery->fetch(PDO::FETCH_ASSOC);
+    $card = $priceQuery->fetch(PDO::FETCH_ASSOC); 
+
+    var_dump($card); // Affiche la réponse de la requête pour déboguer
+
 
     if ($card) {
         if ($user['shards'] >= $card['price']) {
@@ -62,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_id'])) {
         }
     } else {
         echo "<p style='color: red;'>Carte introuvable.</p>";
+        var_dump($cardId); // Vérifie la valeur de l'ID
     }
 }
 ?>
@@ -136,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_id'])) {
             <div id="popup-card-display" class="popup-card-display"></div>
             <div id="popup-price-info" class="popup-price-info"></div>
             <form method="POST">
+            <input type="hidden" id="popup-card-id" name="card_id" value="">
                 <button type="submit" name="card_id" id="buy-button" class="buy-button" style="display: none;">Acheter la carte</button>
             </form>
             <p id="insufficient-funds" style="color: red; display: none;">Vous n'avez pas assez de fonds pour acheter cette carte.</p>
@@ -144,9 +149,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_id'])) {
 
 <script>
 function openPopup(cardId, cardName, cardPrice) {
+    if (!cardId) {
+        alert('ID de la carte invalide.');
+        return;
+    }
     const popup = document.getElementById('popup');
     const popupTitle = document.getElementById('popup-title');
     const popupCardId = document.getElementById('popup-card-id');
+    popupCardId.value = cardId;
     const popupCardDisplay = document.getElementById('popup-card-display');
     const popupPriceInfo = document.getElementById('popup-price-info');
     const buyButton = document.getElementById('buy-button');

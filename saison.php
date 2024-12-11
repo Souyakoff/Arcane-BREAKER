@@ -30,7 +30,7 @@ $current_date = date('Y-m-d');
 
 // Requête SQL pour obtenir la saison la plus proche de la date actuelle
 $stmt = $conn->prepare("
-    SELECT 
+    SELECT id,
         COALESCE(datede_debut, '1970-01-01') AS datede_debut, 
         COALESCE(datede_fin, '1970-01-01') AS datede_fin,
         name, description, theme, image, pass_benefits 
@@ -125,15 +125,74 @@ $levels = $stmt_levels->fetchAll(PDO::FETCH_ASSOC);
             background-color: #f0be73;
         }
 
-        footer {
-            text-align: center;
-            background-color: #333;
-            color: white;
-            padding: 15px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
+        .pass-preview {
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.pass-preview h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.levels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.level-card {
+    background-color: #1a1a2e;
+    border-radius: 15px;
+    padding: 15px;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.level-card:hover {
+    background-color: #e94560;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    color: #1a1a2e;
+}
+
+.level-card h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.level-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.level-benefits {
+    font-size: 14px;
+    line-height: 1.5;
+}
+.view-pass-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #ff63a8;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.view-pass-btn:hover {
+    background: #6b63ff;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
     </style>
 </head>
 <body>
@@ -167,19 +226,23 @@ $levels = $stmt_levels->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="pass-preview">
     <h3>Prévisualisation du Pass</h3>
-    <ul>
+    <div class="levels-grid">
         <?php if ($levels): ?>
             <?php foreach ($levels as $level): ?>
-                <li>
-                    <h4>Palier <?php echo htmlspecialchars($level['level']); ?>: <?php echo htmlspecialchars($level['name']); ?></h4>
-                    <p><?php echo nl2br(htmlspecialchars($level['benefits'])); ?></p>
-                </li>
+                <div class="level-card">
+                    <h4>Niveau <?php echo htmlspecialchars($level['level']); ?></h4>
+                    <p class="level-name"><?php echo htmlspecialchars($level['name']); ?></p>
+                    <p class="level-benefits"><?php echo nl2br(htmlspecialchars($level['benefits'])); ?></p>
+                </div>
             <?php endforeach; ?>
         <?php else: ?>
             <p>Aucun palier disponible pour cette saison.</p>
         <?php endif; ?>
-    </ul>
+    </div>
+    <a href="all_levels.php?season_id=<?php echo urlencode($current_season['id']); ?>" class="view-pass-btn">Voir le Passe</a>
 </div>
+
+
     </main>
 
     <footer>
