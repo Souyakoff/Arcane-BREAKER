@@ -59,31 +59,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_deck'])) {
     <link rel="stylesheet" href="styles_deck.css">
 </head>
 <body>
-    <header>
-        <h1>Mes Decks</h1>
-        <nav>
-            <ul>
-               <li><a href="index.php">Accueil</a></li>
-               <li><a id="play" href="javascript:void(0);" onclick="openGameWindow()">Jouer</a></li> <!-- Nouveau lien "Jouer" -->
-                <li><a href="market.php">Boutique</a></li>
-                <div class="profile-container" style="display: flex; align-items: center;">
+<header class="bg-gray-900 text-white py-4">
+    <h1 class="text-3xl font-bold text-center" id="title"><strong>Arcane</strong> Breaker</h1>
+    <nav class="mt-4">
+        <ul class="flex justify-center space-x-4">
+            <li><a href="index.php" class="hover:text-blue-400">Accueil</a></li>
             <?php if ($user_id): ?>
-                <a href="profile.php">
-                    <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-                </a>
+            <li><a href="javascript:void(0);" onclick="openGameWindow()" class="hover:text-blue-400" id="game-launch">Jouer</a></li>
             <?php endif; ?>
-        </div>
-        <div class="menu-links" style="display: flex; align-items: center;">
-            <?php if ($user_id): ?>
-                <li><a href="logout.php">Se déconnecter</a></li>
-            <?php else: ?>
-                <li><a href="login.php">Connexion</a></li>
-            <?php endif; ?>
-            <li><a href="settings.php" style="margin-left: 20px;"><i class="bi bi-gear nav-icon"></i></a></li>
-        </div>
-    </ul>
-
-    </header>
+            <li><a href="saison.php" class="hover:text-blue-400">Saison 1</a></li>
+            <li><a href="market.php" class="hover:text-blue-400">Boutique</a></li>
+            <li><a href="buy_shards.php" class="hover:text-blue-400">Shards</a></li>
+            <div class="profile-container flex items-center">
+                <?php if ($user_id): ?>
+                    <a href="profile.php">
+                        <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" class="w-10 h-10 rounded-full mr-3">
+                    </a>
+                <?php endif; ?>
+            </div>
+            <div class="menu-links flex items-center">
+                <?php if ($user_id): ?>
+                    <li><a href="logout.php" class="hover:text-blue-400">Se déconnecter</a></li>
+                <?php else: ?>
+                    <li><a href="login.php" class="hover:text-blue-400">Connexion</a></li>
+                <?php endif; ?>
+                <li><a href="settings.php" class="ml-5 text-xl hover:text-blue-400"><i class="bi bi-gear"></i></a></li>
+            </div>
+        </ul>
+    </nav>
+</header>
 
     <div= class="container">
     <section class="decks">

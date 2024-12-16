@@ -315,3 +315,14 @@ h2 {
 p{
     text-align: center;
 }
+
+#game-launch{
+    background-color: #f0be73;
+    border-radius: 5px; /* Effet arrondi lors du survol */
+    color: #000000;
+}
+
+#game-launch:hover{
+    background-color: #000000;
+    color: #f0be73; 
+}

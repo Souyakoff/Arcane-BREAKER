@@ -6,77 +6,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="images/Arcanelogo.png" type="image/x-icon">
     <title>Arcane | Breaker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.2.7/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles.css" id="theme-link">
     <link rel="stylesheet" href="styles_index.css">
+
 </head>
 <body>
-    <header>
-        <h1><strong id="title">Arcane</strong> Breaker</h1>
-        <nav>
-            <ul>
-                <li><a href="index.php">Accueil</a></li>
+<header class="bg-gray-900 text-white py-4">
+    <h1 class="text-3xl font-bold text-center" id="title"><strong>Arcane</strong> Breaker</h1>
+    <nav class="mt-4">
+        <ul class="flex justify-center space-x-4">
+            <li><a href="index.php" class="hover:text-blue-400">Accueil</a></li>
+            <?php if ($user_id): ?>
+            <li><a href="javascript:void(0);" onclick="openGameWindow()" class="hover:text-blue-400" id="game-launch">Jouer</a></li>
+            <?php endif; ?>
+            <li><a href="deck.php" class="hover:text-blue-400">Deck</a></li>
+            <li><a href="saison.php" class="hover:text-blue-400">Saison 1</a></li>
+            <li><a href="market.php" class="hover:text-blue-400">Boutique</a></li>
+            <li><a href="buy_shards.php" class="hover:text-blue-400">Shards</a></li>
+            <?php if ($isAdmin): ?>
+                <li><a href="admin_dashboard.php" class="hover:text-blue-400">Admin</a></li>
+            <?php endif; ?>
+            <div class="profile-container flex items-center">
                 <?php if ($user_id): ?>
-                <li><a id="play" href="javascript:void(0);" onclick="openGameWindow()">Jouer</a></li> <!-- Nouveau lien "Jouer" -->
+                    <a href="profile.php">
+                        <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" class="w-10 h-10 rounded-full mr-3">
+                    </a>
                 <?php endif; ?>
-                <li><a href="deck.php">Deck</a></li>
-                <li><a href="saison.php">Saison 1</a></li>
-                <li><a href="market.php">Boutique</a></li>
-                <li><a href="buy_shards.php">Shards</a></li>
-                <?php if ($isAdmin): ?>
-                    <li><a href="admin_dashboard.php">Admin</a></li>
+            </div>
+            <div class="menu-links flex items-center">
+                <?php if ($user_id): ?>
+                    <li><a href="logout.php" class="hover:text-blue-400">Se déconnecter</a></li>
+                <?php else: ?>
+                    <li><a href="login.php" class="hover:text-blue-400">Connexion</a></li>
                 <?php endif; ?>
-                <div class="profile-container" style="display: flex; align-items: center;">
-            <?php if ($user_id): ?>
-                <a href="profile.php">
-                    <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-                </a>
-            <?php endif; ?>
-        </div>
-        <div class="menu-links" style="display: flex; align-items: center;">
-            <?php if ($user_id): ?>
-                <li><a href="logout.php">Se déconnecter</a></li>
-            <?php else: ?>
-                <li><a href="login.php">Connexion</a></li>
-            <?php endif; ?>
-            <li><a href="settings.php" style="margin-left: 20px;"><i class="bi bi-gear nav-icon"></i></a></li>
-        </div>
-    </ul>
-        </nav>
-    </header>
-    
+                <li><a href="settings.php" class="ml-5 text-xl hover:text-blue-400"><i class="bi bi-gear"></i></a></li>
+            </div>
+        </ul>
+    </nav>
+</header>
     <main>
-    <section class="intro">
+    <section class="intro hidden md:block">
     <div class="logo">
         <img src="images/Arcanebg-removebg-preview.png" alt="Logo Arcane">
     </div>
 </section>
 
 
-<section class="game-rules">
-    <h2>Les Règles du Jeu</h2>
-    <div class="rule-container">
-        <div class="rule-text">
-            <h3>1. Composez votre Deck</h3>
+
+
+
+<section class="game-rules py-12">
+    <h2 class="text-4xl font-semibold text-center mb-6">Les Règles du Jeu</h2>
+    <div class="rule-container flex flex-wrap justify-between mb-8">
+        <div class="rule-text w-full md:w-1/2 px-4">
+            <h3 class="text-2xl font-semibold">1. Composez votre Deck</h3>
             <p>Créez votre deck avec des cartes représentant vos personnages, attaques, et capacités spéciales. Votre stratégie commence ici.</p>
         </div>
-        <div class="rule-image">
-            <img src="images/deck-example.jpg" alt="Exemple de Deck">
+        <div class="rule-image w-full md:w-1/2 px-4">
+            <img src="images/deck.PNG" alt="Exemple de Deck" class="w-full h-auto rounded-lg">
         </div>
     </div>
-
-    <div class="rule-container">
-    <div class="rule-image">
-            <img src="images/roles-example.jpg" alt="Exemple de Rôles">
+    <div class="rule-container flex flex-wrap justify-between mb-8">
+        <div class="rule-image w-full md:w-1/2 px-4">
+            <img src="images/roles-example.jpg" alt="Exemple de Rôles" class="w-full h-auto rounded-lg">
         </div>
-        <div class="rule-text">
-            <h3>2. Choisissez votre Rôle</h3>
+        <div class="rule-text w-full md:w-1/2 px-4">
+            <h3 class="text-2xl font-semibold">2. Choisissez votre Rôle</h3>
             <p>Le jeu se joue entre deux rôles : l'attaquant tente de réduire les PV de l'adversaire, tandis que le défenseur protège son arcane.</p>
         </div>
     </div>
 
-    <div class="rule-container">
-        <div class="rule-text">
+    <div class="rule-container flex flex-wrap justify-between mb-8">
+        <div class="rule-text w-full md:w-1/2 px-4">
             <h3>3. Attaquez et Défendez-vous</h3>
             <p>Jouez à tour de rôle en choisissant une carte pour attaquer ou défendre. Utilisez des stratégies pour renverser la partie.</p>
         </div>
@@ -85,11 +88,11 @@
         </div>
     </div>
 
-    <div class="rule-container">
-                <div class="rule-image">
+    <div class="rule-container flex flex-wrap justify-between mb-8">
+    <div class="rule-image w-full md:w-1/2 px-4">
             <img src="images/victory-example.jpg" alt="Exemple de Victoire">
         </div>
-        <div class="rule-text">
+        <div class="rule-text w-full md:w-1/2 px-4">
             <h3>4. Gagnez la Partie</h3>
             <p>Réduisez les PV de l'arcane de votre adversaire à zéro pour remporter la victoire. Protégez votre propre arcane à tout prix.</p>
         </div>
@@ -97,10 +100,10 @@
 </section>
 
 
-<section class="cards">
-    <h2>Champions Disponibles</h2>
+<section class="cards py-12 bg-gray-100">
+    <h2 class="text-4xl font-semibold text-center mb-6">Champions Disponibles</h2>
     <p>Dans Arcane Breaker vous pouvez récupérez des champions tous unique en leurs genre avec leurs propre capacité spéciale !</Datag></p>
-    <ul class="card-list">
+    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <?php
         // Inclure le fichier de connexion à la base de données
         include('db_connect.php');
@@ -113,14 +116,13 @@
         if ($stmt->rowCount() > 0) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
-                <li class="card-item" data-id="<?php echo htmlspecialchars($row['id']); ?>">
-                    <div class="card" onclick="openPopup(<?php echo htmlspecialchars($row['id']); ?>, '<?php echo htmlspecialchars($row['name']); ?>')">
-                        <!-- Face avant de la carte -->
-                        <div class="card-front" style="background-image: url('<?php echo htmlspecialchars($row['image']); ?>');">
-                            <h4><?php echo htmlspecialchars($row['name']); ?></h4>
+  <li class="card-item" data-id="<?php echo htmlspecialchars($row['id']); ?>">
+                    <div class="card shadow-lg rounded-lg overflow-hidden cursor-pointer" onclick="openPopup(<?php echo htmlspecialchars($row['id']); ?>, '<?php echo htmlspecialchars($row['name']); ?>')">
+                        <div class="card-front bg-cover bg-center h-48 flex items-center justify-center text-white" style="background-image: url('<?php echo htmlspecialchars($row['image']); ?>');">
+                            <h4 class="text-xl font-bold"><?php echo htmlspecialchars($row['name']); ?></h4>
                         </div>
-                        <!-- Face arrière de la carte -->
-                        <div class="card-back" style="background-image: url('<?php echo htmlspecialchars($row['city_image']); ?>');">
+                        <div class="card-back bg-cover bg-center h-48 flex items-center justify-center text-white" style="background-image: url('<?php echo htmlspecialchars($row['city_image']); ?>');">
+                            <div class="p-4">
                             <h4><?php echo htmlspecialchars($row['name']); ?></h4>
                             <p><strong>Points de Vie :</strong> <?php echo htmlspecialchars($row['health_points']); ?></p>
                             <p><strong>Attaque :</strong> <?php echo htmlspecialchars($row['attack']); ?></p>
@@ -166,7 +168,7 @@
     </footer>
     <script>
     function openGameWindow() {
-        window.open('game.php', 'GameWindow', 'width=800,height=600');  // Ouvre le jeu dans une nouvelle fenêtre
+        window.open('lobby.php', 'GameWindow', 'width=800,height=600');  // Ouvre le jeu dans une nouvelle fenêtre
     }
 </script>
 </body>

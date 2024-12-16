@@ -59,23 +59,25 @@ $cards = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <section class="player-deck">
             <h3>Votre Deck</h3>
             <div class="card-container">
-                <?php
-                foreach ($cards as $card) {
-                    echo '<div class="card">';
-                    echo '<div class="card-front">';
-                    echo '<img src="' . $card['image'] . '" alt="' . $card['name'] . '">';
-                    echo '<h4>' . $card['name'] . '</h4>';
-                    echo '</div>';
-                    echo '<div class="card-back">';
-                    echo '<p><strong>PV:</strong> ' . $card['health_points'] . '</p>';
-                    echo '<p><strong>Attaque:</strong> ' . $card['attack'] . '</p>';
-                    echo '<p><strong>Défense:</strong> ' . $card['defense'] . '</p>';
-                    echo '<p><strong>Capacité Spéciale:</strong> ' . $card['special_ability'] . '</p>';
-                    echo '</div>';
-                    echo '</div>';
-                }
-                ?>
-            </div>
+            <?php foreach ($cards as $card): ?>
+            <li class="card-item" data-id="<?php echo htmlspecialchars($card['id']); ?>">
+                <div class="card" onclick="openPopup(<?php echo htmlspecialchars($card['id']); ?>, '<?php echo htmlspecialchars($card['name']); ?>')">
+                    <!-- Face avant de la carte -->
+                    <div class="card-front" style="background-image: url('<?php echo htmlspecialchars($card['image']); ?>');">
+                        <h4><?php echo htmlspecialchars($card['name']); ?></h4>
+                        <!-- L'image est maintenant gérée par le background CSS -->
+                    </div>
+                    <!-- Face arrière de la carte (détails) -->
+                    <div class="card-back" style="background-image: url('<?php echo htmlspecialchars($card['city_image']); ?>');">
+    <h4><?php echo htmlspecialchars($card['name']); ?></h4>
+    <p><strong>Points de Vie :</strong> <?php echo htmlspecialchars($card['health_points']); ?></p>
+    <p><strong>Attaque :</strong> <?php echo htmlspecialchars($card['attack']); ?></p>
+    <p><strong>Défense :</strong> <?php echo htmlspecialchars($card['defense']); ?></p>
+    <p><strong>Capacité Spéciale :</strong> <?php echo htmlspecialchars($card['special_ability']); ?></p>
+</div>
+                </div>
+            </li>
+        <?php endforeach; ?>
         </section>
 
         <!-- Section de combat -->

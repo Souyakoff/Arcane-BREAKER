@@ -1,4 +1,5 @@
 <?php include('header.php'); ?>
+<?php include('lang.php'); // Charger la langue ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -98,11 +99,15 @@
         <div class="settings-section">
             <h3>Langue</h3>
             <label for="language">Choisissez la langue :</label>
-            <select id="language" name="language">
-                <option value="fr" selected>Français</option>
-                <option value="en">Anglais</option>
-                <option value="es">Espagnol</option>
+            <h2><?php echo $translations['settings']; ?></h2>
+        <form method="POST" action="">
+            <label for="language"><?php echo $translations['choose_language']; ?></label>
+            <select id="language" name="language" onchange="this.form.submit()">
+                <option value="fr" <?php echo ($_SESSION['lang'] == 'fr') ? 'selected' : ''; ?>>Français</option>
+                <option value="en" <?php echo ($_SESSION['lang'] == 'en') ? 'selected' : ''; ?>>English</option>
+                <option value="es" <?php echo ($_SESSION['lang'] == 'es') ? 'selected' : ''; ?>>Español</option>
             </select>
+        </form>
         </div>
 
         <!-- Modifier le mot de passe -->

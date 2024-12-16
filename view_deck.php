@@ -1,3 +1,4 @@
+<?php include('header.php'); ?>
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -56,41 +57,57 @@ $cards_in_deck = $stmt_cards_in_deck->fetchAll();
     <link rel="stylesheet" href="styles_viewdeck.css">
 </head>
 <body>
-    <header>
-        <h1>Mon Deck : <?php echo htmlspecialchars($deck['deck_name']); ?></h1>
+<header>
+        <h1>Mes Decks</h1>
         <nav>
             <ul>
-                <li><a href="index.php">Accueil</a></li>
-                <li><a href="profile.php">Mon Profil</a></li>
-                <li><a id="play" href="javascript:void(0);" onclick="openGameWindow()">Jouer</a></li> <!-- Nouveau lien "Jouer" -->
-                <li><a href="deck.php">Mes Decks</a></li>
+               <li><a href="deck.php">Retour</a></li>
+                <div class="profile-container" style="display: flex; align-items: center;">
+            <?php if ($user_id): ?>
+                <a href="profile.php">
+                    <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                </a>
+            <?php endif; ?>
+        </div>
+        <div class="menu-links" style="display: flex; align-items: center;">
+            <?php if ($user_id): ?>
                 <li><a href="logout.php">Se déconnecter</a></li>
-            </ul>
-        </nav>
+            <?php else: ?>
+                <li><a href="login.php">Connexion</a></li>
+            <?php endif; ?>
+            <li><a href="settings.php" style="margin-left: 20px;"><i class="bi bi-gear nav-icon"></i></a></li>
+        </div>
+    </ul>
     </header>
 
     <div class="container">
         <section class="deck-details">
             <h2>Détails du Deck</h2>
             <p><strong>Nom du Deck :</strong> <?php echo htmlspecialchars($deck['deck_name']); ?></p>
-
-            <h3>Cartes dans ce Deck</h3>
-
             <?php if (count($cards_in_deck) > 0): ?>
-                <div class="card-list">
-                    <?php foreach ($cards_in_deck as $card): ?>
-                        <div class="card-item">
-                            <img src="<?php echo htmlspecialchars($card['image']); ?>" alt="Image de <?php echo htmlspecialchars($card['name']); ?>" class="card-image">
-                            <div class="card-details">
-                                <h4><?php echo htmlspecialchars($card['name']); ?></h4>
-                                <p><strong>Points de Vie :</strong> <?php echo htmlspecialchars($card['health_points']); ?></p>
-                                <p><strong>Attaque :</strong> <?php echo htmlspecialchars($card['attack']); ?></p>
-                                <p><strong>Défense :</strong> <?php echo htmlspecialchars($card['defense']); ?></p>
-                                <p><strong>Capacité Spéciale :</strong> <?php echo htmlspecialchars($card['special_ability']); ?></p>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+    <section class="cards">
+    <h2>Cartes dans ce Deck</h2>
+    <ul class="card-list">
+        <?php foreach ($cards_in_deck as $card): ?>
+            <li class="card-item" data-id="<?php echo htmlspecialchars($card['id']); ?>">
+                <div class="card" onclick="openPopup(<?php echo htmlspecialchars($card['id']); ?>, '<?php echo htmlspecialchars($card['name']); ?>')">
+                    <!-- Face avant de la carte -->
+                    <div class="card-front" style="background-image: url('<?php echo htmlspecialchars($card['image']); ?>');">
+                        <h4><?php echo htmlspecialchars($card['name']); ?></h4>
+                    </div>
+                    <!-- Face arrière de la carte (détails) -->
+                    <div class="card-back" style="background-image: url('<?php echo htmlspecialchars($card['city_image']); ?>');">
+                        <h4><?php echo htmlspecialchars($card['name']); ?></h4>
+                        <p><strong>Points de Vie :</strong> <?php echo htmlspecialchars($card['health_points']); ?></p>
+                        <p><strong>Attaque :</strong> <?php echo htmlspecialchars($card['attack']); ?></p>
+                        <p><strong>Défense :</strong> <?php echo htmlspecialchars($card['defense']); ?></p>
+                        <p><strong>Capacité Spéciale :</strong> <?php echo htmlspecialchars($card['special_ability']); ?></p>
+                    </div>
                 </div>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</section>
             <?php else: ?>
                 <p>Ce deck ne contient aucune carte pour le moment.</p>
             <?php endif; ?>

@@ -218,7 +218,7 @@ header h1 {
 
 .intro {
     position: relative; /* Pour pouvoir positionner des éléments à l'intérieur */
-    background-image: url('images/villes/zaun.jpg');
+    background-image: url('images/Arcaneanimatedbg.gif');
     background-size: cover;
     background-position: center;
     background-attachment: fixed; /* L'arrière-plan reste fixe quand on fait défiler */
@@ -281,18 +281,18 @@ header h1 {
     100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .card-item {
-        max-width: 150px;
-        height: 250px;
-    }
-
-    .call-to-action {
-        padding: 20px;
-    }
-
+/* Cacher la section intro sur les petits écrans (jusqu'à 390px de large) */
+@media (max-width: 390px) {
     .intro {
-        height: 600px;
+        display: none;
     }
 }
+
+/* Afficher la section intro sur les écrans plus larges que 390px */
+@media (min-width: 391px) {
+    .intro {
+        display: block;
+    }
+}
+
+
