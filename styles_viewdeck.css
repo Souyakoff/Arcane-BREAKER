@@ -111,3 +111,17 @@
 .card-back p {
     margin: 10px 0;
 }
+
+.class-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 8px; /* Ajustez pour l'espacement */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    border-radius: 50%; /* Optionnel pour un look arrondi */
+}
+
+.class-icon img {
+    width: 32px; /* Taille de l'icône */
+    height: 32px;
+}

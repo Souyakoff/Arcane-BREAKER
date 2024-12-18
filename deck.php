@@ -21,7 +21,9 @@ $stmt->execute([$user_id]);
 $decks = $stmt->fetchAll();
 
 // Récupérer toutes les cartes disponibles
-$query_cards = "SELECT * FROM cards";
+$query_cards = "SELECT cards.*, classe.icone
+FROM cards 
+INNER JOIN classe ON cards.id_class = classe.id_class";
 $stmt_cards = $conn->prepare($query_cards);
 $stmt_cards->execute();
 $cards = $stmt_cards->fetchAll();
@@ -127,7 +129,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_deck'])) {
         <?php foreach ($cards as $card): ?>
             <li class="card-item" data-id="<?php echo htmlspecialchars($card['id']); ?>">
                 <div class="card" onclick="openPopup(<?php echo htmlspecialchars($card['id']); ?>, '<?php echo htmlspecialchars($card['name']); ?>')">
-                    <!-- Face avant de la carte -->
+                <div class="class-icon absolute top-0 right-0 p-2">
+            <img src="<?php echo htmlspecialchars($card['icone']); ?>" alt="Classe" class="w-8 h-8">
+        </div>
+                <!-- Face avant de la carte -->
                     <div class="card-front" style="background-image: url('<?php echo htmlspecialchars($card['image']); ?>');">
                         <h4><?php echo htmlspecialchars($card['name']); ?></h4>
                         <!-- L'image est maintenant gérée par le background CSS -->

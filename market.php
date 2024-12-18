@@ -32,7 +32,7 @@ srand(strtotime($dateSeed)); // Initialise le générateur aléatoire
 $dailyCardsQuery = $conn->query("SELECT * FROM cards");
 $allCards = $dailyCardsQuery->fetchAll(PDO::FETCH_ASSOC);
 shuffle($allCards); // Mélange les cartes
-$dailyCards = array_slice($allCards, 0, 5); // Sélectionne les 5 premières cartes mélangées
+$dailyCards = array_slice($allCards, 0, 14); // Sélectionne les 5 premières cartes mélangées
 
 // Traitement d'un achat
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_id'])) {
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_id'])) {
 <body>
     <h1>Boutique du Jour</h1>
     <h3>La boutique se mettra à jour dans :</h3>
-<div id="countdown" style="font-size: 1.5rem; color: #333;"></div>
+<div id="countdown" style="font-size: 1.5rem; color:#e94560;"></div>
     <section class="cards">
         <h2>Cartes Disponibles Aujourd'hui</h2>
         <ul class="card-list">

@@ -61,7 +61,7 @@
     <h2 class="text-4xl font-semibold text-center mb-6">Les Règles du Jeu</h2>
     <div class="rule-container flex flex-wrap justify-between mb-8">
         <div class="rule-text w-full md:w-1/2 px-4">
-            <h3 class="text-2xl font-semibold">1. Composez votre Deck</h3>
+            <h3 class="text-2xl font-semibold">Composez votre Deck</h3>
             <p>Créez votre deck avec des cartes représentant vos personnages, attaques, et capacités spéciales. Votre stratégie commence ici.</p>
         </div>
         <div class="rule-image w-full md:w-1/2 px-4">
@@ -73,14 +73,14 @@
             <img src="images/roles-example.jpg" alt="Exemple de Rôles" class="w-full h-auto rounded-lg">
         </div>
         <div class="rule-text w-full md:w-1/2 px-4">
-            <h3 class="text-2xl font-semibold">2. Choisissez votre Rôle</h3>
+            <h3 class="text-2xl font-semibold">Choisissez votre Rôle</h3>
             <p>Le jeu se joue entre deux rôles : l'attaquant tente de réduire les PV de l'adversaire, tandis que le défenseur protège son arcane.</p>
         </div>
     </div>
 
     <div class="rule-container flex flex-wrap justify-between mb-8">
         <div class="rule-text w-full md:w-1/2 px-4">
-            <h3>3. Attaquez et Défendez-vous</h3>
+            <h3>Attaquez et Défendez-vous</h3>
             <p>Jouez à tour de rôle en choisissant une carte pour attaquer ou défendre. Utilisez des stratégies pour renverser la partie.</p>
         </div>
         <div class="rule-image">
@@ -93,7 +93,7 @@
             <img src="images/victory-example.jpg" alt="Exemple de Victoire">
         </div>
         <div class="rule-text w-full md:w-1/2 px-4">
-            <h3>4. Gagnez la Partie</h3>
+            <h3>Gagnez la Partie</h3>
             <p>Réduisez les PV de l'arcane de votre adversaire à zéro pour remporter la victoire. Protégez votre propre arcane à tout prix.</p>
         </div>
     </div>
@@ -168,7 +168,7 @@
     </footer>
     <script>
     function openGameWindow() {
-        window.open('lobby.php', 'GameWindow', 'width=800,height=600');  // Ouvre le jeu dans une nouvelle fenêtre
+        window.open('lobby.php', 'GameWindow', 'width=6000,height=2000');  // Ouvre le jeu dans une nouvelle fenêtre
     }
 </script>
 </body>
