@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles.css" id="theme-link">
     <link rel="stylesheet" href="styles_index.css">
+    <link rel="manifest" href="manifest.json">
 
 </head>
 <body>
@@ -104,6 +105,7 @@
     <h2 class="text-4xl font-semibold text-center mb-6">Champions Disponibles</h2>
     <p>Dans Arcane Breaker vous pouvez récupérez des champions tous unique en leurs genre avec leurs propre capacité spéciale !</Datag></p>
     <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    
         <?php
         // Inclure le fichier de connexion à la base de données
         include('db_connect.php');

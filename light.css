@@ -5,7 +5,13 @@
     font-style: normal;
 }
 
+button:hover, a:hover, div:hover {
+    cursor: url('images/cursor/normal.png'), pointer;
+}
+
+
 body {
+    cursor: url('images/cursor/normal.png'), auto;
     font-family: 'Arcane Nine', sans-serif;
     margin: 0;
     padding: 0;

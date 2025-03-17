@@ -34,40 +34,35 @@ $allCards = $dailyCardsQuery->fetchAll(PDO::FETCH_ASSOC);
 shuffle($allCards); // Mélange les cartes
 $dailyCards = array_slice($allCards, 0, 14); // Sélectionne les 5 premières cartes mélangées
 
-// Traitement d'un achat
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_id'])) {
-    $cardId = intval($_POST['card_id']); // On s'assure que l'ID est un entier valide
+    $cardId = intval($_POST['card_id']); 
 
-    // Vérification de l'existence de la carte
     $priceQuery = $conn->prepare("SELECT id, price FROM cards WHERE id = :id");
     $priceQuery->execute(['id' => $cardId]);
     $card = $priceQuery->fetch(PDO::FETCH_ASSOC); 
 
-    var_dump($card); // Affiche la réponse de la requête pour déboguer
-
-
     if ($card) {
         if ($user['shards'] >= $card['price']) {
-            // Déduire le prix des shards de l'utilisateur
+            // Déduire les shards et traiter l'achat
             $updateUser = $conn->prepare("UPDATE users SET shards = shards - :price WHERE id = :id");
             $updateUser->execute(['price' => $card['price'], 'id' => $userId]);
 
-            // Insérer l'achat dans la table `purchased_cards`
             $insertPurchase = $conn->prepare("INSERT INTO purchased_cards (user_id, card_id, quantite) 
                                               VALUES (:user_id, :card_id, 1) 
                                               ON DUPLICATE KEY UPDATE quantite = quantite + 1");
             $insertPurchase->execute(['user_id' => $userId, 'card_id' => $cardId]);
 
-            // Confirmer l'achat
-            echo "<p style='color: green;'>Achat réussi : {$card['price']} shards déduits !</p>";
+            // Confirmer l'achat via animation JS
+            echo "<script>handlePurchaseResult(true);</script>";
         } else {
-            echo "<p style='color: red;'>Fonds insuffisants.</p>";
+            // Afficher erreur via animation JS
+            echo "<script>handlePurchaseResult(false);</script>";
         }
     } else {
         echo "<p style='color: red;'>Carte introuvable.</p>";
-        var_dump($cardId); // Vérifie la valeur de l'ID
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -223,6 +218,47 @@ const timer = setInterval(updateCountdown, 1000);
 
 // Initialisation immédiate au chargement de la page
 updateCountdown();
+</script>
+<script>
+    function showPurchaseConfirmation(success) {
+    const popup = document.getElementById('popup');
+    const body = document.body;
+
+    // Active ou désactive le flou du corps
+    body.classList.toggle('modal-open', true);
+
+    // Gérer les classes selon le succès ou l'échec
+    popup.classList.remove('success', 'error');
+    popup.classList.add(success ? 'success' : 'error');
+
+    // Afficher la popup avec animation
+    popup.classList.add('show');
+    
+    // Fermer la popup après 3 secondes
+    setTimeout(() => {
+        popup.classList.remove('show');
+        body.classList.remove('modal-open');
+    }, 3000);
+}
+
+function handlePurchaseResult(success) {
+    // Si l'achat est réussi
+    if (success) {
+        showPurchaseConfirmation(true);
+    } else {
+        showPurchaseConfirmation(false);
+    }
+}
+
+// Exemple d'utilisation dans votre logique d'achat
+if ($card) {
+    if ($user['shards'] >= $card['price']) {
+        // Déduire les shards et traiter l'achat...
+        echo "<script>handlePurchaseResult(true);</script>";
+    } else {
+        echo "<script>handlePurchaseResult(false);</script>";
+    }
+}
 </script>
 
 </body>

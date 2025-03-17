@@ -1,7 +1,7 @@
 {
     "name": "Arcane BREAKER Launcher",
     "short_name": "App",
-    "start_url": "index.php",
+    "start_url": "launcher.php",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
@@ -12,5 +12,5 @@
           "type": "image/png"
         }
       ]
-    }
+}
   

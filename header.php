@@ -1,13 +1,16 @@
 <?php
 // Démarrer la session et récupérer les informations de l'utilisateur
+// LOG !!!!
 session_start();
 
 // Vérifier si l'utilisateur est connecté
+// LOG !!!!
 $user_id = $_SESSION['user_id'] ?? null;
 $user = null;
 
 if ($user_id) {
     // Récupérer les informations de l'utilisateur
+    // LOG !!!!
     include('db_connect.php');
     $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
     $stmt->execute([$user_id]);
