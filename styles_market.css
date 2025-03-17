@@ -71,10 +71,10 @@
     align-items: center;
     flex-direction: column;
     border: 3px solid #e7a86d;
-    box-shadow: 0 0 10px 2px rgba(231, 168, 109, 0.8);
+    box-shadow: 0 0 10px 2px rgba(231, 168, 109, 0.8); /* Effet de brillance */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transform: rotateY(180deg);
+    transform: rotateY(180deg); /* Tourne la face arrière */
 }
 
 .card-back::before {
@@ -84,13 +84,13 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5); /* Couche semi-transparente noire */
     z-index: 1;
 }
 
 .card-back * {
     position: relative;
-    z-index: 2;
+    z-index: 2; /* Place le contenu au-dessus de la couche assombrie */
 }
 
 .card-back p {
@@ -288,4 +288,31 @@ h2, h3, #countdown{
     font-size: 1.2em;
     color: red;
     display: none; /* Caché par défaut */
+}
+
+.popup.success {
+    background-color: #28a745;
+    color: white;
+    animation: slideIn 0.5s ease-out;
+}
+
+.popup.error {
+    background-color: #dc3545;
+    color: white;
+    animation: shake 0.5s ease-out;
+}
+
+/* Animation de la confirmation de succès */
+@keyframes slideIn {
+    0% { transform: translate(-50%, -50%) scale(0); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Animation d'erreur (secouer) */
+@keyframes shake {
+    0% { transform: translate(-50%, -50%) translateX(0); }
+    25% { transform: translate(-50%, -50%) translateX(-10px); }
+    50% { transform: translate(-50%, -50%) translateX(10px); }
+    75% { transform: translate(-50%, -50%) translateX(-10px); }
+    100% { transform: translate(-50%, -50%) translateX(0); }
 }

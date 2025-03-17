@@ -222,7 +222,7 @@ header h1 {
     background-size: cover;
     background-position: center;
     background-attachment: fixed; /* L'arrière-plan reste fixe quand on fait défiler */
-    height: 1100px; /* Vous pouvez ajuster la hauteur de la section */
+    height: 1150px; /* Vous pouvez ajuster la hauteur de la section */
     color: #fff;
     text-align: center;
 }

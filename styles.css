@@ -5,7 +5,13 @@
     font-style: normal;
 }
 
+button:hover, a:hover, div:hover {
+    cursor: url('images/cursor/normal.png'), pointer;
+}
+
+
 body {
+    cursor: url('images/cursor/normal.png'), auto;
     font-family: 'Arcane Nine', sans-serif;
     margin: 0;
     padding: 0;
@@ -13,6 +19,7 @@ body {
     color: #eaeaea;
     line-height: 1.6; /* Augmenter la lisibilité */
 }
+
 
 header {
     background-color: #111214;
@@ -145,24 +152,7 @@ header h1 {
 }
 
 ::-webkit-scrollbar {
-    width: 10px; 
-}
-
-
-::-webkit-scrollbar-thumb {
-    background-color: #e94560; 
-    width: 2px;
-    border-radius: 5px; 
-}
-
-
-::-webkit-scrollbar-track {
-    background-color: #1f1822; /* Couleur de fond de la piste de défilement */
-}
-
-
-::-webkit-scrollbar-corner {
-    background-color: transparent; /* Couleur de fond de l'angle entre les barres de défilement */
+    display: none;
 }
 
 #play{
