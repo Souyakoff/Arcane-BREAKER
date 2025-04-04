@@ -5,7 +5,19 @@
     font-style: normal;
 }
 
-button:hover, a:hover, div:hover {
+html.is-changing .transition-fade {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+html.is-rendering .transition-fade {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+:hover, a:hover, div:hover {
     cursor: url('images/cursor/normal.png'), pointer;
 }
 
@@ -129,7 +141,16 @@ header h1 {
     width: 1550px; /* Ajustez la taille du logo selon vos besoins */
     height: auto;
 }
-
+#username{
+    margin-top: 7px;
+    margin-left: 5px;
+    color: #e94560;
+}
+#level{
+    margin-top: 7px;
+    margin-left: 5px;
+    color: #f0be73;
+}
  /* Profil à droite */
  .profile-container {
     display: flex;
