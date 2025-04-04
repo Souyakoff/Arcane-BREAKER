@@ -3,9 +3,16 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Connexion à la base de données
-include 'db_connect.php'; // Assurez-vous que ce fichier contient les informations nécessaires
+require_once 'db_connect.php';
+if (!$conn) {
+    die("Erreur de connexion à la base de données.");
+}
 
-session_start();//LOG !!!
+
+// Récupérer l'ID de l'utilisateur depuis la session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
@@ -20,13 +27,16 @@ $stmt = $conn->prepare($query);
 $stmt->execute([$user_id]);
 $decks = $stmt->fetchAll();
 
-// Récupérer toutes les cartes disponibles
+// Récupérer uniquement les cartes achetées par l'utilisateur
 $query_cards = "SELECT cards.*, classe.icone
-FROM cards 
-INNER JOIN classe ON cards.id_class = classe.id_class";
+                FROM cards 
+                INNER JOIN classe ON cards.id_class = classe.id_class
+                INNER JOIN purshased_cards ON cards.id = purshased_cards.card_id
+                WHERE purshased_cards.user_id = ?";
 $stmt_cards = $conn->prepare($query_cards);
-$stmt_cards->execute();
+$stmt_cards->execute([$user_id]);
 $cards = $stmt_cards->fetchAll();
+
 
 // Ajouter un nouveau deck
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_deck'])) {
@@ -57,18 +67,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_deck'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arcane | Breaker - Mes Decks</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="transition.css">
     <link rel="stylesheet" href="styles.css" id="theme-link">
     <link rel="stylesheet" href="styles_deck.css">
 </head>
 <body>
 <header class="bg-gray-900 text-white py-4">
-    <h1 class="text-3xl font-bold text-center" id="title"><strong>Arcane</strong> Breaker</h1>
-    <nav class="mt-4">
+<img src="images/ArcaneLogoMain.png" alt="LogoMainArcane" style="width: 8%; height: auto;">
+
+<nav class="mt-4">
         <ul class="flex justify-center space-x-4">
-            <li><a href="index.php" class="hover:text-blue-400">Accueil</a></li>
+            <li><a href="index.php" class="hover:text-blue-400 nav-link active" >Accueil</a></li>
             <?php if ($user_id): ?>
             <li><a href="javascript:void(0);" onclick="openGameWindow()" class="hover:text-blue-400" id="game-launch">Jouer</a></li>
             <?php endif; ?>
+            <li><a href="deck.php" class="hover:text-blue-400">Deck</a></li>
             <li><a href="saison.php" class="hover:text-blue-400">Saison 1</a></li>
             <li><a href="market.php" class="hover:text-blue-400">Boutique</a></li>
             <li><a href="buy_shards.php" class="hover:text-blue-400">Shards</a></li>
@@ -80,7 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_deck'])) {
                 <?php endif; ?>
             </div>
             <div class="menu-links flex items-center">
+           
                 <?php if ($user_id): ?>
+                    <span id="username"class="text-white font-semibold"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    <span id="level"class="text-white font-semibold">Lvl: <?php echo htmlspecialchars($_SESSION['level']); ?></span>
                     <li><a href="logout.php" class="hover:text-blue-400">Se déconnecter</a></li>
                 <?php else: ?>
                     <li><a href="login.php" class="hover:text-blue-400">Connexion</a></li>
@@ -90,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_deck'])) {
         </ul>
     </nav>
 </header>
-
+    <main id="swup" class="transition-fade">
     <div= class="container">
     <section class="decks">
     <h2>Mes Decks</h2>
@@ -114,7 +130,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_deck'])) {
     <p>Vous n'avez encore créé aucun deck. Créez-en un maintenant !</p>
 <?php endif; ?>
 
-
     <form action="deck.php" method="POST" class="form-create-deck">
         <label for="deck_name">Nom du deck :</label>
         <input type="text" id="deck_name" name="deck_name" required>
@@ -129,22 +144,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_deck'])) {
         <?php foreach ($cards as $card): ?>
             <li class="card-item" data-id="<?php echo htmlspecialchars($card['id']); ?>">
                 <div class="card" onclick="openPopup(<?php echo htmlspecialchars($card['id']); ?>, '<?php echo htmlspecialchars($card['name']); ?>')">
-                <div class="class-icon absolute top-0 right-0 p-2">
-        </div>
-                <!-- Face avant de la carte -->
+                    <div class="class-icon absolute top-0 right-0 p-2">
+                    </div>
+                    <!-- Face avant de la carte -->
                     <div class="card-front" style="background-image: url('<?php echo htmlspecialchars($card['image']); ?>');">
-                    <img src="<?php echo htmlspecialchars($card['icone']); ?>" alt="Classe" class="w-8 h-8">
+                        <img src="<?php echo htmlspecialchars($card['icone']); ?>" alt="Classe" class="w-8 h-8">
                         <h4><?php echo htmlspecialchars($card['name']); ?></h4>
                         <!-- L'image est maintenant gérée par le background CSS -->
                     </div>
                     <!-- Face arrière de la carte (détails) -->
                     <div class="card-back" style="background-image: url('<?php echo htmlspecialchars($card['city_image']); ?>');">
-    <h4><?php echo htmlspecialchars($card['name']); ?></h4>
-    <p><strong>Points de Vie :</strong> <?php echo htmlspecialchars($card['health_points']); ?></p>
-    <p><strong>Attaque :</strong> <?php echo htmlspecialchars($card['attack']); ?></p>
-    <p><strong>Défense :</strong> <?php echo htmlspecialchars($card['defense']); ?></p>
-    <p><strong>Capacité Spéciale :</strong> <?php echo htmlspecialchars($card['special_ability']); ?></p>
-</div>
+                        <h4><?php echo htmlspecialchars($card['name']); ?></h4>
+                        <p><strong>Points de Vie :</strong> <?php echo htmlspecialchars($card['health_points']); ?></p>
+                        <p><strong>Attaque :</strong> <?php echo htmlspecialchars($card['attack']); ?></p>
+                        <p><strong>Défense :</strong> <?php echo htmlspecialchars($card['defense']); ?></p>
+                        <p><strong>Capacité Spéciale :</strong> <?php echo htmlspecialchars($card['special_ability']); ?></p>
+                    </div>
                 </div>
             </li>
         <?php endforeach; ?>
@@ -171,7 +186,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_deck'])) {
         </form>
     </div>
 </div>
-
+</main>
+<div class="overlay transition-overlay"></div>
 <script>
 function openPopup(cardId, cardName) {
     const popup = document.getElementById('popup');
@@ -206,6 +222,5 @@ function closePopup() {
         window.open('game.php', 'GameWindow', 'width=800,height=600');  // Ouvre le jeu dans une nouvelle fenêtre
     }
 </script>
-
 </body>
 </html>

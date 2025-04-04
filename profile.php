@@ -1,7 +1,16 @@
 <?php
 // Connexion à la base de données
-include('db_connect.php');
-session_start();
+// Connexion à la base de données
+require_once 'db_connect.php';
+if (!$conn) {
+    die("Erreur de connexion à la base de données.");
+}
+
+
+// Récupérer l'ID de l'utilisateur depuis la session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Récupérer les informations de l'utilisateur
 $user_id = $_SESSION['user_id'];
@@ -67,29 +76,36 @@ $profile_picture = (!empty($user['profile_picture']) && file_exists($user['profi
 <body>
     <header>
         <h1>Bienvenue, <?= htmlspecialchars($user['username']) ?>!</h1>
-        <nav>
-            <ul>
-                <li><a href="index.php">Accueil</a></li>
-                <li><a id="play" href="javascript:void(0);" onclick="openGameWindow()">Jouer</a></li> <!-- Nouveau lien "Jouer" -->
-                <li><a href="deck.php">Deck</a></li>
-                <li><a href="market.php">Boutique</a></li>
-                <div class="profile-container" style="display: flex; align-items: center;">
+        <nav class="mt-4">
+        <ul class="flex justify-center space-x-4">
+            <li><a href="index.php" class="hover:text-blue-400 nav-link active" >Accueil</a></li>
             <?php if ($user_id): ?>
-                <a href="profile.php">
-                    <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-                </a>
+            <li><a href="javascript:void(0);" onclick="openGameWindow()" class="hover:text-blue-400" id="game-launch">Jouer</a></li>
             <?php endif; ?>
-        </div>
-        <div class="menu-links" style="display: flex; align-items: center;">
-            <?php if ($user_id): ?>
-                <li><a href="logout.php">Se déconnecter</a></li>
-            <?php else: ?>
-                <li><a href="login.php">Connexion</a></li>
-            <?php endif; ?>
-            <li><a href="settings.php" style="margin-left: 20px;"><i class="bi bi-gear nav-icon"></i></a></li>
-        </div>
-    </ul>
-
+            <li><a href="deck.php" class="hover:text-blue-400">Deck</a></li>
+            <li><a href="saison.php" class="hover:text-blue-400">Saison 1</a></li>
+            <li><a href="market.php" class="hover:text-blue-400">Boutique</a></li>
+            <li><a href="buy_shards.php" class="hover:text-blue-400">Shards</a></li>
+            <div class="profile-container flex items-center">
+                <?php if ($user_id): ?>
+                    <a href="profile.php">
+                        <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" class="w-10 h-10 rounded-full mr-3">
+                    </a>
+                <?php endif; ?>
+            </div>
+            <div class="menu-links flex items-center">
+           
+                <?php if ($user_id): ?>
+                    <span id="username"class="text-white font-semibold"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    <span id="level"class="text-white font-semibold">Lvl: <?php echo htmlspecialchars($_SESSION['level']); ?></span>
+                    <li><a href="logout.php" class="hover:text-blue-400">Se déconnecter</a></li>
+                <?php else: ?>
+                    <li><a href="login.php" class="hover:text-blue-400">Connexion</a></li>
+                <?php endif; ?>
+                <li><a href="settings.php" class="ml-5 text-xl hover:text-blue-400"><i class="bi bi-gear"></i></a></li>
+            </div>
+        </ul>
+    </nav>
     </header>
 
     <h2>Mon Profil</h2>

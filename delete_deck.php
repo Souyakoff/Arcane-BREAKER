@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 // Connexion à la base de données
 include 'db_connect.php'; // Assurez-vous que ce fichier contient les informations nécessaires
 
-session_start();
+session_start();//LOG !!!
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {

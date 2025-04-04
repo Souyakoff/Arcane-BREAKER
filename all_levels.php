@@ -1,6 +1,16 @@
 <?php
 include('header.php');
-require 'db_connect.php';
+// Connexion à la base de données
+require_once 'db_connect.php';
+if (!$conn) {
+    die("Erreur de connexion à la base de données.");
+}
+
+
+// Récupérer l'ID de l'utilisateur depuis la session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Activer les erreurs pour le débogage
 ini_set('display_errors', 1);

@@ -5,10 +5,16 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Connexion à la base de données
-require 'db_connect.php';
+require_once 'db_connect.php';
+if (!$conn) {
+    die("Erreur de connexion à la base de données.");
+}
 
-// Démarrer la session
-session_start();
+
+// Récupérer l'ID de l'utilisateur depuis la session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['user_id'])) {
     // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
     header("Location: login.php");
@@ -54,35 +60,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['shards_amount'])) {
 </head>
 <body>
     <header>
-        <h1>Arcane Breaker</h1>
-        <nav>
-            <ul>
-                <li><a href="index.php">Accueil</a></li>
-                <li><a href="deck.php">Deck</a></li>
-                <li><a href="market.php">Boutique</a></li>
-                <div class="profile-container" style="display: flex; align-items: center;">
+    <img src="images/ArcaneLogoMain.png" alt="LogoMainArcane" style="width: 8%; height: auto;">
+
+    <nav class="mt-4">
+        <ul class="flex justify-center space-x-4">
+            <li><a href="index.php" class="hover:text-blue-400 nav-link active" >Accueil</a></li>
             <?php if ($user_id): ?>
-                <a href="profile.php">
-                    <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-                </a>
+            <li><a href="javascript:void(0);" onclick="openGameWindow()" class="hover:text-blue-400" id="game-launch">Jouer</a></li>
             <?php endif; ?>
-        </div>
-        <div class="menu-links" style="display: flex; align-items: center;">
-            <?php if ($user_id): ?>
-                <li><a href="logout.php">Se déconnecter</a></li>
-            <?php else: ?>
-                <li><a href="login.php">Connexion</a></li>
-            <?php endif; ?>
-            <li><a href="settings.php" style="margin-left: 20px;"><i class="bi bi-gear nav-icon"></i></a></li>
-        </div>
-    </ul>
-        </nav>
+            <li><a href="deck.php" class="hover:text-blue-400">Deck</a></li>
+            <li><a href="saison.php" class="hover:text-blue-400">Saison 1</a></li>
+            <li><a href="market.php" class="hover:text-blue-400">Boutique</a></li>
+            <li><a href="buy_shards.php" class="hover:text-blue-400">Shards</a></li>
+            <div class="profile-container flex items-center">
+                <?php if ($user_id): ?>
+                    <a href="profile.php">
+                        <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" class="w-10 h-10 rounded-full mr-3">
+                    </a>
+                <?php endif; ?>
+            </div>
+            <div class="menu-links flex items-center">
+           
+                <?php if ($user_id): ?>
+                    <span id="username"class="text-white font-semibold"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    <span id="level"class="text-white font-semibold">Lvl: <?php echo htmlspecialchars($_SESSION['level']); ?></span>
+                    <li><a href="logout.php" class="hover:text-blue-400">Se déconnecter</a></li>
+                <?php else: ?>
+                    <li><a href="login.php" class="hover:text-blue-400">Connexion</a></li>
+                <?php endif; ?>
+                <li><a href="settings.php" class="ml-5 text-xl hover:text-blue-400"><i class="bi bi-gear"></i></a></li>
+            </div>
+        </ul>
+    </nav>
     </header>
 
     <main>
         <h2>Achetez des Shards</h2>
-        <p>Votre solde actuel : <strong><?php echo htmlspecialchars($user['shards']); ?> shards</strong></p>
-
+        <p>Votre solde actuel : <strong><?php echo htmlspecialchars($user['shards'] ?? 0); ?> shards</strong></p>
         <div class="packs-container">
         <!-- Pack 1 -->
         <div class="shard-pack">

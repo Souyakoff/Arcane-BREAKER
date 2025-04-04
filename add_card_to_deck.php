@@ -2,9 +2,17 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-session_start();
 // Connexion à la base de données
-include 'db_connect.php'; // Assurez-vous que ce fichier contient les informations nécessaires
+require_once 'db_connect.php';
+if (!$conn) {
+    die("Erreur de connexion à la base de données.");
+}
+
+
+// Récupérer l'ID de l'utilisateur depuis la session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {

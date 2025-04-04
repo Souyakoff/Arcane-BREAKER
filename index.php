@@ -1,4 +1,22 @@
-<?php include('header.php'); ?>
+<?php include('header.php'); 
+
+// Affiche toutes les erreurs PHP
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+// Connexion à la base de données
+require_once 'db_connect.php';
+if (!$conn) {
+    die("Erreur de connexion à la base de données.");
+}
+
+
+// Récupérer l'ID de l'utilisateur depuis la session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,6 +26,7 @@
     <title>Arcane | Breaker</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.2.7/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="transition.css">
     <link rel="stylesheet" href="styles.css" id="theme-link">
     <link rel="stylesheet" href="styles_index.css">
     <link rel="manifest" href="manifest.json">
@@ -15,10 +34,11 @@
 </head>
 <body>
 <header class="bg-gray-900 text-white py-4">
-    <h1 class="text-3xl font-bold text-center" id="title"><strong>Arcane</strong> Breaker</h1>
+<img src="images/ArcaneLogoMain.png" alt="LogoMainArcane" style="width: 8%; height: auto;">
+
     <nav class="mt-4">
         <ul class="flex justify-center space-x-4">
-            <li><a href="index.php" class="hover:text-blue-400">Accueil</a></li>
+            <li><a href="index.php" class="hover:text-blue-400 nav-link active" >Accueil</a></li>
             <?php if ($user_id): ?>
             <li><a href="javascript:void(0);" onclick="openGameWindow()" class="hover:text-blue-400" id="game-launch">Jouer</a></li>
             <?php endif; ?>
@@ -26,9 +46,6 @@
             <li><a href="saison.php" class="hover:text-blue-400">Saison 1</a></li>
             <li><a href="market.php" class="hover:text-blue-400">Boutique</a></li>
             <li><a href="buy_shards.php" class="hover:text-blue-400">Shards</a></li>
-            <?php if ($isAdmin): ?>
-                <li><a href="admin_dashboard.php" class="hover:text-blue-400">Admin</a></li>
-            <?php endif; ?>
             <div class="profile-container flex items-center">
                 <?php if ($user_id): ?>
                     <a href="profile.php">
@@ -37,7 +54,10 @@
                 <?php endif; ?>
             </div>
             <div class="menu-links flex items-center">
+           
                 <?php if ($user_id): ?>
+                    <span id="username"class="text-white font-semibold"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    <span id="level"class="text-white font-semibold">Lvl: <?php echo htmlspecialchars($_SESSION['level']); ?></span>
                     <li><a href="logout.php" class="hover:text-blue-400">Se déconnecter</a></li>
                 <?php else: ?>
                     <li><a href="login.php" class="hover:text-blue-400">Connexion</a></li>
@@ -47,16 +67,12 @@
         </ul>
     </nav>
 </header>
-    <main>
+<main id="swup" class="transition-fade">
     <section class="intro hidden md:block">
     <div class="logo">
-        <img src="images/Arcanebg-removebg-preview.png" alt="Logo Arcane">
+        <img src="images/Arcanebg__3_-removebg (1).png" alt="Logo Arcane">
     </div>
 </section>
-
-
-
-
 
 <section class="game-rules py-12">
     <h2 class="text-4xl font-semibold text-center mb-6">Les Règles du Jeu</h2>
@@ -108,7 +124,7 @@
     
         <?php
         // Inclure le fichier de connexion à la base de données
-        include('db_connect.php');
+
 
         // Récupération des cartes depuis la base de données
         $sql = "SELECT * FROM cards ORDER BY RAND() LIMIT 7";
@@ -164,7 +180,8 @@
                 <a href="login.php" class="cta-button">Connexion</a>
                 <?php endif; ?>
         </section>
-    </main>
+</main>
+<div class="overlay transition-overlay"></div>
     <footer>
         <p>&copy; 2024 Arcane Card Game. Tous droits réservés.</p>
     </footer>

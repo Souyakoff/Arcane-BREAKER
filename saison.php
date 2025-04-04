@@ -48,10 +48,6 @@ if (!$current_season) {
     echo "Aucune saison trouvée.";
 }
 
-$stmt_levels = $conn->prepare("SELECT * FROM pass_levels WHERE season_id = :season_id ORDER BY level ASC LIMIT 5");  // Limiter à 5 premiers paliers pour la prévisualisation
-$stmt_levels->execute(['season_id' => $current_season['id']]);
-$levels = $stmt_levels->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -197,14 +193,38 @@ $levels = $stmt_levels->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <header>
-        <h1>Arcane Breaker</h1>
-        <nav>
-            <ul>
-                <li><a href="index.php">Accueil</a></li>
-                <li><a href="season.php">Saison</a></li>
-                <li><a href="profile.php">Profil</a></li>
-            </ul>
-        </nav>
+    <img src="images/ArcaneLogoMain.png" alt="LogoMainArcane" style="width: 8%; height: auto;">
+
+    <nav class="mt-4">
+        <ul class="flex justify-center space-x-4">
+            <li><a href="index.php" class="hover:text-blue-400 nav-link active" >Accueil</a></li>
+            <?php if ($user_id): ?>
+            <li><a href="javascript:void(0);" onclick="openGameWindow()" class="hover:text-blue-400" id="game-launch">Jouer</a></li>
+            <?php endif; ?>
+            <li><a href="deck.php" class="hover:text-blue-400">Deck</a></li>
+            <li><a href="saison.php" class="hover:text-blue-400">Saison 1</a></li>
+            <li><a href="market.php" class="hover:text-blue-400">Boutique</a></li>
+            <li><a href="buy_shards.php" class="hover:text-blue-400">Shards</a></li>
+            <div class="profile-container flex items-center">
+                <?php if ($user_id): ?>
+                    <a href="profile.php">
+                        <img src="<?php echo $profile_picture; ?>" alt="Photo de profil" class="w-10 h-10 rounded-full mr-3">
+                    </a>
+                <?php endif; ?>
+            </div>
+            <div class="menu-links flex items-center">
+           
+                <?php if ($user_id): ?>
+                    <span id="username"class="text-white font-semibold"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    <span id="level"class="text-white font-semibold">Lvl: <?php echo htmlspecialchars($_SESSION['level']); ?></span>
+                    <li><a href="logout.php" class="hover:text-blue-400">Se déconnecter</a></li>
+                <?php else: ?>
+                    <li><a href="login.php" class="hover:text-blue-400">Connexion</a></li>
+                <?php endif; ?>
+                <li><a href="settings.php" class="ml-5 text-xl hover:text-blue-400"><i class="bi bi-gear"></i></a></li>
+            </div>
+        </ul>
+    </nav>
     </header>
 
     <main class="season-container">
@@ -217,32 +237,6 @@ $levels = $stmt_levels->fetchAll(PDO::FETCH_ASSOC);
                 <p><strong>Thème :</strong> <?php echo htmlspecialchars($current_season['theme']); ?></p>
             <?php endif; ?>
         </div>
-
-        <div class="season-pass">
-    <h2>Pass Saison</h2>
-    <p><?php echo nl2br(htmlspecialchars($current_season['pass_benefits'])); ?></p>
-    <a href="buy_pass.php">Acheter le pass</a>
-</div>
-
-<div class="pass-preview">
-    <h3>Prévisualisation du Pass</h3>
-    <div class="levels-grid">
-        <?php if ($levels): ?>
-            <?php foreach ($levels as $level): ?>
-                <div class="level-card">
-                    <h4>Niveau <?php echo htmlspecialchars($level['level']); ?></h4>
-                    <p class="level-name"><?php echo htmlspecialchars($level['name']); ?></p>
-                    <p class="level-benefits"><?php echo nl2br(htmlspecialchars($level['benefits'])); ?></p>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>Aucun palier disponible pour cette saison.</p>
-        <?php endif; ?>
-    </div>
-    <a href="all_levels.php?season_id=<?php echo urlencode($current_season['id']); ?>" class="view-pass-btn">Voir le Passe</a>
-</div>
-
-
     </main>
 
     <footer>
